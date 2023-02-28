@@ -4,6 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/*Add category: [ac]
+Print all categories: [pac]
+Print one category: [poc]
+Add product: [ap]
+Print all products: [pap]
+Print one product: [pop]
+Export products to csv: [epc]
+Export products to xml: [epx]
+Export categories to xml: [ecx]
+Import products from csv: [ipc]
+Import products from xml: [ipx]
+Import categories from csv: [icc]
+Import categories from xml: [icx]
+Delete product: [dp]
+Delete category: [dc]*/
+
 namespace SemestralProject
 {
     internal class App
@@ -75,19 +91,23 @@ namespace SemestralProject
                 Console.WriteLine("-------------------------------");
                 Console.WriteLine("Choose action");
 
-                Console.WriteLine("Add category: [ac]"); //+
-                Console.WriteLine("Print all categories: [pac]"); //+
+                Console.WriteLine("Add category: [ac]");
+                Console.WriteLine("Print all categories: [pac]");
                 Console.WriteLine("Print one category: [poc]");
 
-                Console.WriteLine("Add product: [ap]"); //+
-                Console.WriteLine("Print all products: [pap]"); //+
+                Console.WriteLine("Add product: [ap]");
+                Console.WriteLine("Print all products: [pap]");
                 Console.WriteLine("Print one product: [pop]");
 
                 Console.WriteLine("Export products to csv: [epc]");
+                Console.WriteLine("Export products to xml: [epx]");
                 Console.WriteLine("Export categories to csv: [ecc]");
+                Console.WriteLine("Export categories to xml: [ecx]");
 
                 Console.WriteLine("Import products from csv: [ipc]");
+                Console.WriteLine("Import products from xml: [ipx]");
                 Console.WriteLine("Import categories from csv: [icc]");
+                Console.WriteLine("Import categories from xml: [icx]");
 
                 answer = Console.ReadLine().ToLower();
 
@@ -99,8 +119,6 @@ namespace SemestralProject
                         CreateCategory();
                         Console.ReadKey();
                         break;
-
-                    
                     //Print all categories
                     case "pac":
                         Console.Clear();
@@ -118,12 +136,16 @@ namespace SemestralProject
                         break;
                     //Print one category
                     case "poc":
-                    
+                        break;
+
+
+                    //Add product
                     case "ap":
                         Console.Clear();
                         CreateProduct();
                         Console.ReadKey();
                         break;
+                    //Print all products
                     case "pap":
                         Console.Clear();
                         if (categories.Count > 0)
@@ -139,6 +161,39 @@ namespace SemestralProject
                         }
                         Console.ReadKey();
                         break;
+                    //Print one product
+                    case "pop":
+                        break;
+
+                    //Export products to csv
+                    case "epc":
+                        break;
+                    //Export products to xml
+                    case "epx":
+                        break;
+                    //Export categories to csv
+                    case "ecc":
+                        break;
+                    //Export categories to xml
+                    case "ecx":
+                        break;
+
+
+                    //Import products from csv
+                    case "ipc":
+                        break;
+                    //Import products from xml
+                    case "ipx":
+                        break;
+                    //Import categories from csv
+                    case "icc":
+                        break;
+                    //Import categories from xml
+                    case "icx":
+                        break;
+
+
+
                 }
             } while (answer != "q");
         }
