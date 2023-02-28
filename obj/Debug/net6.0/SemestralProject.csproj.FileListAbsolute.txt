@@ -1,0 +1,15 @@
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\bin\Debug\net6.0\SemestralProject.exe
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\bin\Debug\net6.0\SemestralProject.deps.json
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\bin\Debug\net6.0\SemestralProject.runtimeconfig.json
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\bin\Debug\net6.0\SemestralProject.dll
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\bin\Debug\net6.0\ref\SemestralProject.dll
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\bin\Debug\net6.0\SemestralProject.pdb
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\obj\Debug\net6.0\SemestralProject.csproj.AssemblyReference.cache
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\obj\Debug\net6.0\SemestralProject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\obj\Debug\net6.0\SemestralProject.AssemblyInfoInputs.cache
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\obj\Debug\net6.0\SemestralProject.AssemblyInfo.cs
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\obj\Debug\net6.0\SemestralProject.csproj.CoreCompileInputs.cache
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\obj\Debug\net6.0\SemestralProject.dll
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\obj\Debug\net6.0\ref\SemestralProject.dll
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\obj\Debug\net6.0\SemestralProject.pdb
+C:\Users\Ruslanlaptop\YandexDisk\CZU\programovani\SemestralProject\obj\Debug\net6.0\SemestralProject.genruntimeconfig.cache
