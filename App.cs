@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Xml.Serialization;
 
 /*Add category: [ac]
 Print all categories: [pac]
@@ -276,17 +277,29 @@ namespace SemestralProject
 
         void ExportProductsToXml() {
             Console.WriteLine("test export");
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<Product>));
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializationOverview.xml";
-            System.IO.FileStream file = System.IO.File.Create(path);
+            XmlSerializer writer = new XmlSerializer(typeof(List<Product>));
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializedProducts.xml";
+            FileStream file = File.Create(path);
             writer.Serialize(file, products);
             file.Close();
             return;
         }
 
+        void ImportProductsFromXml()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Product>));
+            Console.WriteLine("test import");
+            using (FileStream stream = File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializedProducts.xml"))
+            {
+                List<Product> dezerializedList = (List<Product>)serializer.Deserialize(stream);
+                products = dezerializedList;
+            }
+            return;
+        }
+
         public void run()
         {
-            Category category1 = new Category(1, "Test cat 1");
+            /*Category category1 = new Category(1, "Test cat 1");
             Category category2 = new Category(2, "Test cat 2");
             Category category3 = new Category(3, "Test cat 3");
             Category category4 = new Category(4, "Test cat 4");
@@ -306,7 +319,7 @@ namespace SemestralProject
             products.Add(product2);
             products.Add(product3);
             products.Add(product4);
-            products.Add(product5);
+            products.Add(product5);*/
 
 
             do
@@ -396,6 +409,9 @@ namespace SemestralProject
                     case Commands.ImportProductsFromCsv:
                         break;
                     case Commands.ImportProductsFromXml:
+                        Console.Clear();
+                        ImportProductsFromXml();
+                        Console.ReadKey();
                         break;
                     case Commands.ImportCategoriesFromCsv:
                         break;
