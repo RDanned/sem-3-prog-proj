@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SemestralProject
 {
-    internal class ShopItem
+    public class ShopItem
     {
-        private int? id = null;
-        private string name = "";
+        protected int? id = null;
+        protected string name = "";
 
         public int? Id
         {

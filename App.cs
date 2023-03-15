@@ -79,11 +79,13 @@ namespace SemestralProject
             string answer = "";
             do
             {
+                Console.Clear();
                 Console.WriteLine("You are deleting category");
                 Console.WriteLine("-------------------------------");
                 Console.WriteLine("Available categories: ");
                 PrintAllCategories();
-                Console.WriteLine("Write category Id that will be deleted: ");
+                Console.Write("Write category Id that will be deleted: ");
+                answer = Console.ReadLine();
                 int categoryId;
                 bool isNumeric = int.TryParse(answer, out categoryId);
                 if (isNumeric)
@@ -96,7 +98,7 @@ namespace SemestralProject
                         List<Product> productsWithCategory = new List<Product>();
                         foreach (Product product in products)
                         {
-                            if(product.Category.Id == category.Id)
+                            if (product.Category != null && product.Category.Id == category.Id)
                             {
                                 productHasCategory = true;
                                 productsWithCategory.Add(product);
@@ -109,7 +111,8 @@ namespace SemestralProject
                             Console.WriteLine("Category is assigned to theese products:");
                             foreach (Product product in productsWithCategory)
                                 PrintOneProduct(product.Id);
-                            Console.WriteLine("Delete them first:");
+                            Console.WriteLine("Delete them first.");
+                            Console.ReadKey();
                             continue;
                         }
                         categories.Remove(category);
@@ -147,7 +150,7 @@ namespace SemestralProject
                 Console.WriteLine("Available categories: ");
                 if (categories.Count > 0)
                 {
-                    foreach(Category category in categories)
+                    foreach (Category category in categories)
                     {
                         Console.WriteLine(category.ToString());
                     }
@@ -169,9 +172,9 @@ namespace SemestralProject
                     int categoryId;
                     bool isNumeric = int.TryParse(answer, out categoryId);
                     if (isNumeric)
-                    {   
+                    {
                         Category category = categories.Find(category => category.Id == categoryId);
-                        if(category != null)
+                        if (category != null)
                         {
                             //product.Categories.Add(new Category());
                             product.Category = category;
@@ -192,7 +195,7 @@ namespace SemestralProject
 
         void DeleteProduct()
         {
-            
+
             string answer = "";
             do
             {
@@ -245,7 +248,7 @@ namespace SemestralProject
         void PrintOneProduct(int? productId)
         {
             Product product = products.Find(product => product.Id == productId);
-            if(product != null)
+            if (product != null)
             {
                 Console.WriteLine(product.ToString());
             } else
@@ -270,9 +273,42 @@ namespace SemestralProject
             }
             return;
         }
-        
+
+        void ExportProductsToXml() {
+            Console.WriteLine("test export");
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<Product>));
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializationOverview.xml";
+            System.IO.FileStream file = System.IO.File.Create(path);
+            writer.Serialize(file, products);
+            file.Close();
+            return;
+        }
+
         public void run()
         {
+            Category category1 = new Category(1, "Test cat 1");
+            Category category2 = new Category(2, "Test cat 2");
+            Category category3 = new Category(3, "Test cat 3");
+            Category category4 = new Category(4, "Test cat 4");
+            Category category5 = new Category(5, "Test cat 5");
+            categories.Add(category1);
+            categories.Add(category2);
+            categories.Add(category3);
+            categories.Add(category4);
+            categories.Add(category5);
+
+            Product product1 = new Product(1, "Test prod 1", "666", category1);
+            Product product2 = new Product(2, "Test prod 2", "1345", category2);
+            Product product3 = new Product(3, "Test prod 3", "346", category3);
+            Product product4 = new Product(4, "Test prod 4", "754", category4);
+            Product product5 = new Product(5, "Test prod 5", "965", null);
+            products.Add(product1);
+            products.Add(product2);
+            products.Add(product3);
+            products.Add(product4);
+            products.Add(product5);
+
+
             do
             {
                 Console.Clear();
@@ -349,6 +385,9 @@ namespace SemestralProject
                     case Commands.ExportProductsToCsv:
                         break;
                     case Commands.ExportProductsToXml:
+                        Console.Clear();
+                        ExportProductsToXml();
+                        Console.ReadKey();
                         break;
                     case Commands.ExportCategoriesToCsv:
                         break;

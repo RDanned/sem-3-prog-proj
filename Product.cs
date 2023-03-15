@@ -6,11 +6,24 @@ using System.Threading.Tasks;
 
 namespace SemestralProject
 {
-    internal class Product: ShopItem
+    public class Product: ShopItem
     {
         private string price = "";
         private List<Category> categories = new List<Category>();
         private Category category = new Category();
+
+        public Product()
+        {
+
+        }
+
+        public Product(int id, string name, string price, Category category)
+        {
+            this.id = id;
+            this.price = price;
+            this.category = category;   
+            this.name = name;
+        }
 
         public string Price
         {
