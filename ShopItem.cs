@@ -8,10 +8,10 @@ namespace SemestralProject
 {
     public class ShopItem
     {
-        protected int? id = null;
+        protected int id;
         protected string name = "";
 
-        public int? Id
+        public int Id
         {
             get { return this.id; }
             set { this.id = value; }

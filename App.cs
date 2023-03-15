@@ -61,6 +61,41 @@ namespace SemestralProject
 
         string answer;
 
+        void UpdateLastCategoryId()
+        {
+            if (categories.Count > 0)
+            {
+                int biggestCategoryId = 0;
+                foreach (Category category in categories)
+                {
+                    if (category.Id > biggestCategoryId)
+                        biggestCategoryId = category.Id;
+                }
+                lastCategoryId = biggestCategoryId;
+            }
+            else
+            {
+                lastCategoryId = 0;
+            }
+        }
+
+        void UpdateLastProductId()
+        {
+            if(products.Count > 0)
+            {
+                int biggestProductId = 0;
+                foreach (Product product in products)
+                {
+                    if(product.Id > biggestProductId)
+                        biggestProductId = product.Id;
+                }
+                lastProductId = biggestProductId;
+            } 
+            else
+            {
+                lastProductId = 0;
+            }
+        }
 
         void AddCategory()
         {
@@ -293,8 +328,33 @@ namespace SemestralProject
             {
                 List<Product> dezerializedList = (List<Product>)serializer.Deserialize(stream);
                 products = dezerializedList;
+                foreach(Product product in products)
+                {
+                    if (!IsCategoryExists(product.Category))
+                    {
+                        categories.Add(product.Category);
+                        Console.WriteLine("Product category was created");
+                    }   
+                }
+                UpdateLastCategoryId();
+                UpdateLastProductId();
             }
             return;
+        }
+
+        bool IsCategoryExists(int id)
+        {
+            bool isExists = false;
+            foreach(Category category in categories)
+            {
+                if (category.Id == id) isExists = true;
+            }
+            return isExists;
+        }
+
+        bool IsCategoryExists(Category category)
+        {
+            return categories.Contains(category);
         }
 
         public void run()
