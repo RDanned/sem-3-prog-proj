@@ -30,7 +30,7 @@ namespace SemestralProject
             set { this.category = value; }
         }
 
-        public string toString()
+        public string ToString()
         {
             return $"#{this.Id}: {this.Name}";
         }

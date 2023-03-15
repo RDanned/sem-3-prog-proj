@@ -8,7 +8,7 @@ namespace SemestralProject
 {
     internal class Category: ShopItem
     {
-        public string toString()
+        public string ToString()
         {
             return $"#{this.Id}: {this.Name}";
         }
