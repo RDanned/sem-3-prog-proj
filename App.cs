@@ -47,9 +47,6 @@ namespace SemestralProject
         public const string ImportCategoriesFromXml = "icx";
 
         public const string Back = "back";
-
-
-
     }
 
     internal class App
@@ -81,16 +78,16 @@ namespace SemestralProject
 
         void UpdateLastProductId()
         {
-            if(products.Count > 0)
+            if (products.Count > 0)
             {
                 int biggestProductId = 0;
                 foreach (Product product in products)
                 {
-                    if(product.Id > biggestProductId)
+                    if (product.Id > biggestProductId)
                         biggestProductId = product.Id;
                 }
                 lastProductId = biggestProductId;
-            } 
+            }
             else
             {
                 lastProductId = 0;
@@ -117,9 +114,7 @@ namespace SemestralProject
             {
                 Console.Clear();
                 Console.WriteLine("You are deleting category");
-                Console.WriteLine("-------------------------------");
-                Console.WriteLine("Available categories: ");
-                PrintAllCategories();
+                PrintAvailableCategories();
                 Console.Write("Write category Id that will be deleted: ");
                 answer = Console.ReadLine();
                 int categoryId;
@@ -182,26 +177,14 @@ namespace SemestralProject
                 product.Name = Console.ReadLine();
                 Console.Write("Write price: ");
                 product.Price = Console.ReadLine();
-                Console.WriteLine("-------------------------------");
-                Console.WriteLine("Available categories: ");
-                if (categories.Count > 0)
-                {
-                    foreach (Category category in categories)
-                    {
-                        Console.WriteLine(category.ToString());
-                    }
-                } else
-                {
-                    Console.WriteLine("There is no categories");
-                }
-                Console.WriteLine("-------------------------------");
+                
+                PrintAvailableCategories();
 
                 Console.Write($"Choose category (by entering category ID) or create new category ([{Commands.AddCategory}] command): ");
                 answer = Console.ReadLine().ToLower();
                 if (answer == Commands.AddCategory)
                 {
                     this.AddCategory();
-                    //product.Categories.Add();
                     product.Category = this.categories.Last();
                 } else
                 {
@@ -212,7 +195,6 @@ namespace SemestralProject
                         Category category = categories.Find(category => category.Id == categoryId);
                         if (category != null)
                         {
-                            //product.Categories.Add(new Category());
                             product.Category = category;
                         } else
                         {
@@ -239,17 +221,15 @@ namespace SemestralProject
                 Console.Write("Chooise product id to delete");
                 answer = Console.ReadLine().ToLower();
 
-                int productId;
-                bool isNumeric = int.TryParse(answer, out productId);
-                if (isNumeric)
+                if (IsValidId(answer))
                 {
+                    int productId = int.Parse(answer);
                     int productIndex = products.FindIndex(product => product.Id == productId);
                     Product product = products.Find(product => product.Id == productId);
                     if (productIndex != -1)
                     {
                         products.Remove(product);
                         Console.WriteLine($"Product is deleted: {product.ToString()}");
-                        //product.Categories.Add(new Category());
                         break;
                     }
                     else
@@ -294,6 +274,56 @@ namespace SemestralProject
             return;
         }
 
+        void PrintOneProduct()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("You are printing a product");
+
+                Console.Write("Chooise product id to print");
+                answer = Console.ReadLine().ToLower();
+
+                if (IsValidId(answer))
+                {
+                    int productId = int.Parse(answer);
+                    int productIndex = products.FindIndex(product => product.Id == productId);
+                    Product product = products.Find(product => product.Id == productId);
+                    if (productIndex != -1)
+                    {
+                        Console.WriteLine($"{product.ToString()}");
+                        if(product.Category != null)
+                        {
+                            Console.WriteLine("Product in category:");
+                            Console.WriteLine(product.Category.ToString());
+                        } else
+                        {
+                            Console.WriteLine("Product doesn't has category");
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Product doesn't exists");
+                        continue;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Wrong product id. Product id must be numeric");
+                }
+            } while (answer != Commands.Back);
+            return;
+        }
+
+        void PrintAvailableCategories()
+        {
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("Available categories: ");
+            PrintAllCategories();
+            Console.WriteLine("-------------------------------");
+        }
+
         void PrintAllCategories()
         {
             if (categories.Count > 0)
@@ -305,8 +335,55 @@ namespace SemestralProject
             }
             else
             {
-                Console.WriteLine("No categories");
+                Console.WriteLine("There is no categories");
             }
+            return;
+        }
+
+        bool IsValidId(string id)
+        {
+            return int.TryParse(id, out _);
+        }
+
+        void PrintOneCategory()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("You are printing the category");
+                PrintAllCategories();
+                Console.Write("Chooise category id to display category");
+                answer = Console.ReadLine().ToLower();
+
+                if (IsValidId(answer))
+                {
+                    int categoryId = int.Parse(answer);
+                    int categoryIndex = categories.FindIndex(category => category.Id == categoryId);
+                    Category category = categories.Find(category => category.Id == categoryId);
+                    if (categoryIndex != -1)
+                    {
+                        Console.WriteLine($"{category.ToString()}");
+                        Console.WriteLine("Products in category: ");
+                        foreach(Product product in products)
+                        {
+                            if(product.Category != null && product.Category.Id == categoryId)
+                            {
+                                Console.WriteLine($"{product.ToString()}");
+                            }
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Category doesn't exists");
+                        continue;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Wrong category id. Category id must be numeric");
+                }
+            } while (answer != Commands.Back);
             return;
         }
 
@@ -359,34 +436,14 @@ namespace SemestralProject
 
         public void run()
         {
-            /*Category category1 = new Category(1, "Test cat 1");
-            Category category2 = new Category(2, "Test cat 2");
-            Category category3 = new Category(3, "Test cat 3");
-            Category category4 = new Category(4, "Test cat 4");
-            Category category5 = new Category(5, "Test cat 5");
-            categories.Add(category1);
-            categories.Add(category2);
-            categories.Add(category3);
-            categories.Add(category4);
-            categories.Add(category5);
-
-            Product product1 = new Product(1, "Test prod 1", "666", category1);
-            Product product2 = new Product(2, "Test prod 2", "1345", category2);
-            Product product3 = new Product(3, "Test prod 3", "346", category3);
-            Product product4 = new Product(4, "Test prod 4", "754", category4);
-            Product product5 = new Product(5, "Test prod 5", "965", null);
-            products.Add(product1);
-            products.Add(product2);
-            products.Add(product3);
-            products.Add(product4);
-            products.Add(product5);*/
-
 
             do
             {
                 Console.Clear();
                 Console.WriteLine("Welcome To The Shop");
                 Console.WriteLine("-------------------------------");
+
+                Console.WriteLine($"LOAD TEST DATA: [init]");
 
                 Console.WriteLine($"Add category: [{Commands.AddCategory}]");
                 Console.WriteLine($"Delete category: [{Commands.DeleteCategory}]");
@@ -413,6 +470,37 @@ namespace SemestralProject
 
                 switch (answer)
                 {
+                    // TEST DATA, todo: delete
+                    case "init":
+                        Category category1 = new Category(1, "Test cat 1");
+                        Category category2 = new Category(2, "Test cat 2");
+                        Category category3 = new Category(3, "Test cat 3");
+                        Category category4 = new Category(4, "Test cat 4");
+                        Category category5 = new Category(5, "Test cat 5");
+                        categories.Add(category1);
+                        categories.Add(category2);
+                        categories.Add(category3);
+                        categories.Add(category4);
+                        categories.Add(category5);
+
+                        Product product1 = new Product(1, "Test prod 1", "666", category1);
+                        Product product2 = new Product(2, "Test prod 2", "1345", category2);
+                        Product product3 = new Product(3, "Test prod 3", "346", category3);
+                        Product product4 = new Product(4, "Test prod 4", "754", category4);
+                        Product product5 = new Product(5, "Test prod 5", "965", null);
+                        Product product6 = new Product(5, "Test prod 6", "315", category3);
+                        Product product7 = new Product(5, "Test prod 7", "618", category3);
+                        Product product8 = new Product(5, "Test prod 8", "234", category3);
+                        products.Add(product1);
+                        products.Add(product2);
+                        products.Add(product3);
+                        products.Add(product4);
+                        products.Add(product5);
+                        products.Add(product6);
+                        products.Add(product7);
+                        products.Add(product8);
+
+                        break;
                     //Add category
                     case Commands.AddCategory:
                         Console.Clear();
@@ -434,6 +522,9 @@ namespace SemestralProject
                         break;
                     //Print one category
                     case Commands.PrintOneCategory:
+                        Console.Clear();
+                        PrintOneCategory();
+                        Console.ReadKey();
                         break;
                     //Add product
                     case Commands.AddProduct:
@@ -453,6 +544,9 @@ namespace SemestralProject
                         break;
                     //Print one product
                     case Commands.PrintOneProduct:
+                        Console.Clear();
+                        PrintOneProduct();
+                        Console.ReadKey();
                         break;
                     //Export products to csv
                     case Commands.ExportProductsToCsv:
