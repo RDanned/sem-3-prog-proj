@@ -28,11 +28,13 @@ namespace SemestralProject
     {
         public const string AddCategory = "ac";
         public const string DeleteCategory = "dc";
+        public const string EditCategory = "ec";
         public const string PrintAllCategories = "pac";
         public const string PrintOneCategory = "poc";
 
         public const string AddProduct = "ap";
         public const string DeleteProduct = "dp";
+        public const string EditProduct = "ep";
         public const string PrintAllProducts = "pap";
         public const string PrintOneProduct = "pop";
 
@@ -57,6 +59,12 @@ namespace SemestralProject
         int lastProductId = 0;
 
         string answer;
+
+        void PressAnyKeyMsg()
+        {
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadLine();
+        }
 
         void UpdateLastCategoryId()
         {
@@ -387,14 +395,66 @@ namespace SemestralProject
             return;
         }
 
+        string ExportToXml<ShopItemType>(string savePath, List<ShopItemType> items)
+        {
+            if (File.Exists(savePath))
+            {
+                throw new FileAlreadyExists(savePath);
+                return "";
+            } else
+            {
+                XmlSerializer writer = new XmlSerializer(typeof(List<ShopItemType>));
+                FileStream file = File.Create(savePath);
+                writer.Serialize(file, items);
+                file.Close();
+
+                string pathToFile = file.Name;
+
+                return pathToFile;
+            }
+        }
+
         void ExportProductsToXml() {
-            Console.WriteLine("test export");
-            XmlSerializer writer = new XmlSerializer(typeof(List<Product>));
+            string answer = "";
+            do {
+                Console.WriteLine("Import file");
+                Console.Write("Write path to folder where you wanna save your file: ");
+                answer = Console.ReadLine();
+                string pathToFolder = "";
+                pathToFolder = answer;
+
+                if (!Directory.Exists(pathToFolder))
+                {
+                    Console.WriteLine("Directory doesn't exists");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+                Console.Write("Write file name: ");
+                answer = Console.ReadLine();
+                string fileName = answer;
+
+                try
+                {
+                    Console.WriteLine("Importing...");
+                    string pathToFile = ExportToXml<Product>($"{pathToFolder}\\{fileName}.xml", products);
+                    Console.WriteLine("Imported completed. Path to file is: " + pathToFile);
+                    PressAnyKeyMsg();
+                    break;
+                } catch(FileAlreadyExists e)
+                {
+                    Console.WriteLine($"An error was occured: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+                
+            } while (answer != Commands.Back);
+            return;
+            /*XmlSerializer writer = new XmlSerializer(typeof(List<Product>));
             var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializedProducts.xml";
             FileStream file = File.Create(path);
             writer.Serialize(file, products);
-            file.Close();
-            return;
+            file.Close();*/
         }
 
         void ImportProductsFromXml()
@@ -447,11 +507,13 @@ namespace SemestralProject
 
                 Console.WriteLine($"Add category: [{Commands.AddCategory}]");
                 Console.WriteLine($"Delete category: [{Commands.DeleteCategory}]");
+                Console.WriteLine($"Edit category: [{Commands.EditCategory}]");
                 Console.WriteLine($"Print all categories: [{Commands.PrintAllCategories}]");
                 Console.WriteLine($"Print one category: [{Commands.PrintOneCategory}]");
 
                 Console.WriteLine($"Add product: [{Commands.AddProduct}]");
                 Console.WriteLine($"Delete product: [{Commands.DeleteProduct}]");
+                Console.WriteLine($"Edit product: [{Commands.EditProduct}]");
                 Console.WriteLine($"Print all products: [{Commands.PrintAllProducts}]");
                 Console.WriteLine($"Print one product: [{Commands.PrintOneProduct}]");
 
@@ -514,6 +576,12 @@ namespace SemestralProject
                         DeleteCategory();
                         Console.ReadKey();
                         break;
+                    //Edit category
+                    case Commands.EditCategory:
+                        Console.Clear();
+                        //EditCategory();
+                        Console.ReadKey();
+                        break;
                     //Print all categories
                     case Commands.PrintAllCategories:
                         Console.Clear();
@@ -533,8 +601,15 @@ namespace SemestralProject
                         Console.WriteLine("New product was created. Press any key to return to main menu");
                         Console.ReadKey();
                         break;
+                    //Delete product
                     case Commands.DeleteProduct:
                         DeleteProduct();
+                        break;
+                    //Edit product
+                    case Commands.EditProduct:
+                        Console.Clear();
+                        //EditProduct();
+                        Console.ReadKey();
                         break;
                     //Print all products
                     case Commands.PrintAllProducts:
@@ -548,27 +623,34 @@ namespace SemestralProject
                         PrintOneProduct();
                         Console.ReadKey();
                         break;
-                    //Export products to csv
+                    //Export products to csv file
                     case Commands.ExportProductsToCsv:
                         break;
+                    //Export products to xml file
                     case Commands.ExportProductsToXml:
                         Console.Clear();
                         ExportProductsToXml();
                         Console.ReadKey();
                         break;
+                    //Export categories to csv file
                     case Commands.ExportCategoriesToCsv:
                         break;
+                    //Export categories to xml file
                     case Commands.ExportCategoriesToXml:
                         break;
+                    //Import products to csv file
                     case Commands.ImportProductsFromCsv:
                         break;
+                    //Import products to xml file
                     case Commands.ImportProductsFromXml:
                         Console.Clear();
                         ImportProductsFromXml();
                         Console.ReadKey();
                         break;
+                    //Import categories to csv file
                     case Commands.ImportCategoriesFromCsv:
                         break;
+                    //Import categories to xml file
                     case Commands.ImportCategoriesFromXml:
                         break;
                 }
