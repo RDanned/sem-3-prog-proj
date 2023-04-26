@@ -620,6 +620,54 @@ namespace SemestralProject
             Console.WriteLine("return to main: [back]");
         }
 
+        void EditCategory()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("You are editing the product");
+                PrintAllCategories();
+                Console.Write("Chooise category id to display modify(edit)");
+                BackToMenuMessage();
+                answer = Console.ReadLine().ToLower();
+
+                if (IsValidId(answer))
+                {
+                    int categoryId = int.Parse(answer);
+                    int categoryIndex = categories.FindIndex(category => category.Id == categoryId);
+                    Category category = categories.Find(category => category.Id == categoryId);
+                    if (categoryIndex != -1)
+                    {
+                        Console.WriteLine("Current category:");
+                        Console.WriteLine($"{category.ToString()}");
+                        Console.WriteLine("Products in category: ");
+                        Console.Write("Write new category name: ");
+                        category.Name = Console.ReadLine();
+                        Console.WriteLine("Category is updated:");
+                        Console.WriteLine($"{category.ToString()}");
+                        foreach (Product product in products)
+                        {
+                            if (product.Category != null && product.Category.Id == categoryId)
+                            {
+                                product.Category = category;
+                            }
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Category doesn't exists");
+                        continue;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Wrong category id. Category id must be numeric");
+                }
+            } while (answer != Commands.Back);
+            return;
+        }
+
         public void run()
         {
 
@@ -705,7 +753,7 @@ namespace SemestralProject
                     //Edit category
                     case Commands.EditCategory:
                         Console.Clear();
-                        //EditCategory();
+                        EditCategory();
                         Console.ReadKey();
                         break;
                     //Print all categories
