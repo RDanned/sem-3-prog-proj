@@ -64,7 +64,7 @@ namespace SemestralProject
         void PressAnyKeyMsg()
         {
             Console.WriteLine("Press any key to continue...");
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         void UpdateLastCategoryId()
@@ -112,7 +112,6 @@ namespace SemestralProject
             category.Id = lastCategoryId++;
             categories.Add(category);
             Console.Write("Category is created: " + category.ToString());
-            Console.ReadKey();
             return;
         }
 
@@ -570,11 +569,6 @@ namespace SemestralProject
 
             } while (answer != Commands.Back);
             return;
-            /*XmlSerializer writer = new XmlSerializer(typeof(List<Product>));
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializedProducts.xml";
-            FileStream file = File.Create(path);
-            writer.Serialize(file, products);
-            file.Close();*/
         }
 
         void ImportProductsFromXml()
@@ -625,9 +619,9 @@ namespace SemestralProject
             string answer = "";
             do
             {
-                Console.WriteLine("You are editing the product");
+                Console.WriteLine("You are editing the category");
                 PrintAllCategories();
-                Console.Write("Chooise category id to display modify(edit)");
+                Console.Write("Chooise category id to modify(edit)");
                 BackToMenuMessage();
                 answer = Console.ReadLine().ToLower();
 
@@ -640,7 +634,6 @@ namespace SemestralProject
                     {
                         Console.WriteLine("Current category:");
                         Console.WriteLine($"{category.ToString()}");
-                        Console.WriteLine("Products in category: ");
                         Console.Write("Write new category name: ");
                         category.Name = Console.ReadLine();
                         Console.WriteLine("Category is updated:");
@@ -652,6 +645,90 @@ namespace SemestralProject
                                 product.Category = category;
                             }
                         }
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Category doesn't exists");
+                        continue;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Wrong category id. Category id must be numeric");
+                }
+            } while (answer != Commands.Back);
+            return;
+        }
+
+        void EditProduct()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("You are editing the product");
+                PrintAllProducts();
+                Console.Write("Chooise product id to modify(edit)");
+                BackToMenuMessage();
+                answer = Console.ReadLine().ToLower();
+
+                if (IsValidId(answer))
+                {
+                    int productId = int.Parse(answer);
+                    int productIndex = products.FindIndex(product => product.Id == productId);
+                    Product product = products.Find(product => product.Id == productId);
+                    if (productIndex != -1)
+                    {
+                        Console.WriteLine("Current product:");
+                        Console.WriteLine($"{product.ToString()}");
+
+                        Console.Write("Write new product name: ");
+                        product.Name = Console.ReadLine();
+                        Console.Write("Write new product price: ");
+                        product.Price = Console.ReadLine();
+
+                        
+                        string categoryChangeAnswer = "";
+                        do
+                        {
+                            Console.Write("Do you want to change category?[yes][no]");
+                            categoryChangeAnswer = Console.ReadLine();
+
+                            if(categoryChangeAnswer == "yes") {
+                                Console.WriteLine("Available categories: ");
+                                PrintAllCategories();
+                                Console.Write("Choose category id: ");
+                                answer = Console.ReadLine().ToLower();
+                                int categoryId;
+                                bool isNumeric = int.TryParse(answer, out categoryId);
+                                if (isNumeric)
+                                {
+                                    Category category = categories.Find(category => category.Id == categoryId);
+                                    if (category != null)
+                                    {
+                                        product.Category = category;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Category doesn't exists");
+                                        continue;
+                                    }
+                                }
+                                Console.WriteLine("Category is updated");
+                                break;
+                            } if (categoryChangeAnswer == "no") {
+                                break;
+                            } else {
+                                continue;
+                            }
+                        }
+                        while (categoryChangeAnswer != "yes" || categoryChangeAnswer != "noe") ;
+
+
+                        Console.WriteLine("Product is updated:");
+                        Console.WriteLine($"{product.ToString()}");
+
+                        products[productIndex] = product;
                         break;
                     }
                     else
@@ -741,72 +818,83 @@ namespace SemestralProject
                     case Commands.AddCategory:
                         Console.Clear();
                         AddCategory();
-                        Console.WriteLine("New category was created. Press any key to return to main menu");
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Delete category
                     case Commands.DeleteCategory:
                         Console.Clear();
                         DeleteCategory();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Edit category
                     case Commands.EditCategory:
                         Console.Clear();
                         EditCategory();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Print all categories
                     case Commands.PrintAllCategories:
                         Console.Clear();
                         PrintAllCategories();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Print one category
                     case Commands.PrintOneCategory:
                         Console.Clear();
                         PrintOneCategory();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Add product
                     case Commands.AddProduct:
                         Console.Clear();
                         AddProduct();
-                        Console.WriteLine("New product was created. Press any key to return to main menu");
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Delete product
                     case Commands.DeleteProduct:
                         DeleteProduct();
+                        PressAnyKeyMsg();
+                        Console.ReadKey();
                         break;
                     //Edit product
                     case Commands.EditProduct:
                         Console.Clear();
-                        //EditProduct();
+                        EditProduct();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Print all products
                     case Commands.PrintAllProducts:
                         Console.Clear();
                         PrintAllProducts();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Print one product
                     case Commands.PrintOneProduct:
                         Console.Clear();
                         PrintOneProduct();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Export products to csv file
                     case Commands.ExportProductsToCsv:
                         Console.Clear();
                         ExportProductsToCsv();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Export products to xml file
                     case Commands.ExportProductsToXml:
                         Console.Clear();
                         ExportProductsToXml();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Export categories to csv file
@@ -822,6 +910,7 @@ namespace SemestralProject
                     case Commands.ImportProductsFromXml:
                         Console.Clear();
                         ImportProductsFromXml();
+                        PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
                     //Import categories to csv file
@@ -829,6 +918,11 @@ namespace SemestralProject
                         break;
                     //Import categories to xml file
                     case Commands.ImportCategoriesFromXml:
+                        break;
+                    default:
+                        Console.WriteLine("Action doesn't exist");
+                        PressAnyKeyMsg();
+                        Console.ReadKey();
                         break;
                 }
             } while (answer != "q");
