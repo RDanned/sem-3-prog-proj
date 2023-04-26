@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Xml.Serialization;
+using System.Reflection;
 
 /*Add category: [ac]
 Print all categories: [pac]
@@ -122,6 +123,7 @@ namespace SemestralProject
             {
                 Console.Clear();
                 Console.WriteLine("You are deleting category");
+                BackToMenuMessage();
                 PrintAvailableCategories();
                 Console.Write("Write category Id that will be deleted: ");
                 answer = Console.ReadLine();
@@ -215,7 +217,7 @@ namespace SemestralProject
                 Console.WriteLine($"New product was created: {product.ToString()}");
                 break;
                 return;
-            } while (answer != "ok" || answer != "q");
+            } while (answer != Commands.Back);
             return;
         }
 
@@ -227,6 +229,7 @@ namespace SemestralProject
             {
                 Console.WriteLine("You are deleting a product");
                 Console.Write("Chooise product id to delete");
+                BackToMenuMessage();
                 answer = Console.ReadLine().ToLower();
 
                 if (IsValidId(answer))
@@ -290,6 +293,7 @@ namespace SemestralProject
                 Console.WriteLine("You are printing a product");
 
                 Console.Write("Chooise product id to print");
+                BackToMenuMessage();
                 answer = Console.ReadLine().ToLower();
 
                 if (IsValidId(answer))
@@ -361,6 +365,7 @@ namespace SemestralProject
                 Console.WriteLine("You are printing the category");
                 PrintAllCategories();
                 Console.Write("Chooise category id to display category");
+                BackToMenuMessage();
                 answer = Console.ReadLine().ToLower();
 
                 if (IsValidId(answer))
@@ -395,6 +400,73 @@ namespace SemestralProject
             return;
         }
 
+        /// <summary>
+        /// Provide generic and specific handling of fields
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="p"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private static object GetCsvFieldasedOnValue<ShopItemType>(PropertyInfo p, ShopItemType item)
+        {
+            string value = "";
+
+            try
+            {
+                value = p.GetValue(item, null)?.ToString();
+                if (value == null) return "NULL";  // Deal with nulls
+                if (value.Trim().Length == 0) return ""; // Deal with spaces and blanks
+
+                // Guard strings with "s, they may contain the delimiter!
+                if (p.PropertyType == typeof(string))
+                {
+                    value = string.Format("\"{0}\"", value);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return value;
+        }
+
+        string ExportToCsv<ShopItemType>(string savePath, List<ShopItemType> items)
+        {
+            if (File.Exists(savePath))
+            {
+                throw new FileAlreadyExists(savePath);
+                return "";
+            }
+            else
+            {
+                string delimiter = ";";
+                Type itemType = typeof(ShopItemType);
+                var props = itemType.GetProperties(BindingFlags.Public | BindingFlags.Instance).OrderBy(p => p.Name);
+
+                var csv = new StringBuilder();
+
+                // Write Headers
+                csv.AppendLine(string.Join(delimiter, props.Select(p => p.Name)));
+
+                // Write Rows
+                foreach (var item in items)
+                {
+                    // Write Fields
+                    csv.AppendLine(string.Join(delimiter, props.Select(p => GetCsvFieldasedOnValue(p, item))));
+                }
+
+                FileStream file = File.Create(savePath);
+                StreamWriter writer = new StreamWriter(file);
+                Console.WriteLine(csv.ToString());
+                writer.Write(csv.ToString());
+                writer.Close();
+                file.Close();
+
+                return file.Name;
+
+            }
+        }
+
         string ExportToXml<ShopItemType>(string savePath, List<ShopItemType> items)
         {
             if (File.Exists(savePath))
@@ -418,6 +490,7 @@ namespace SemestralProject
             string answer = "";
             do {
                 Console.WriteLine("Import file");
+                BackToMenuMessage();
                 Console.Write("Write path to folder where you wanna save your file: ");
                 answer = Console.ReadLine();
                 string pathToFolder = "";
@@ -457,8 +530,56 @@ namespace SemestralProject
             file.Close();*/
         }
 
+        void ExportProductsToCsv()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("Export file");
+                BackToMenuMessage();
+                Console.Write("Write path to folder where you wanna save your file: ");
+                answer = Console.ReadLine();
+                string pathToFolder = "";
+                pathToFolder = answer;
+
+                if (!Directory.Exists(pathToFolder))
+                {
+                    Console.WriteLine("Directory doesn't exists");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+                Console.Write("Write file name: ");
+                answer = Console.ReadLine();
+                string fileName = answer;
+
+                try
+                {
+                    Console.WriteLine("Exporting...");
+                    string pathToFile = ExportToCsv<Product>($"{pathToFolder}\\{fileName}.csv", products);
+                    Console.WriteLine("Imported completed. Path to file is: " + pathToFile);
+                    PressAnyKeyMsg();
+                    break;
+                }
+                catch (FileAlreadyExists e)
+                {
+                    Console.WriteLine($"An error was occured: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+            } while (answer != Commands.Back);
+            return;
+            /*XmlSerializer writer = new XmlSerializer(typeof(List<Product>));
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializedProducts.xml";
+            FileStream file = File.Create(path);
+            writer.Serialize(file, products);
+            file.Close();*/
+        }
+
         void ImportProductsFromXml()
         {
+            BackToMenuMessage();
             XmlSerializer serializer = new XmlSerializer(typeof(List<Product>));
             Console.WriteLine("test import");
             using (FileStream stream = File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializedProducts.xml"))
@@ -492,6 +613,11 @@ namespace SemestralProject
         bool IsCategoryExists(Category category)
         {
             return categories.Contains(category);
+        }
+
+        void BackToMenuMessage()
+        {
+            Console.WriteLine("return to main: [back]");
         }
 
         public void run()
@@ -625,6 +751,9 @@ namespace SemestralProject
                         break;
                     //Export products to csv file
                     case Commands.ExportProductsToCsv:
+                        Console.Clear();
+                        ExportProductsToCsv();
+                        Console.ReadKey();
                         break;
                     //Export products to xml file
                     case Commands.ExportProductsToXml:
