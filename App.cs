@@ -510,7 +510,6 @@ namespace SemestralProject
                     Console.WriteLine("Exporting...");
                     string pathToFile = ExportToXml<Product>($"{pathToFolder}\\{fileName}.xml", products);
                     Console.WriteLine("Export completed. Path to file is: " + pathToFile);
-                    PressAnyKeyMsg();
                     break;
                 } catch(FileAlreadyExists e)
                 {
@@ -551,7 +550,6 @@ namespace SemestralProject
                     Console.WriteLine("Exporting...");
                     string pathToFile = ExportToXml<Category>($"{pathToFolder}\\{fileName}.xml", categories);
                     Console.WriteLine("Export completed. Path to file is: " + pathToFile);
-                    PressAnyKeyMsg();
                     break;
                 }
                 catch (FileAlreadyExists e)
@@ -592,8 +590,7 @@ namespace SemestralProject
                 {
                     Console.WriteLine("Exporting...");
                     string pathToFile = ExportToCsv<ShopItemType>($"{pathToFolder}\\{fileName}.csv", items);
-                    Console.WriteLine("Imported completed. Path to file is: " + pathToFile);
-                    PressAnyKeyMsg();
+                    Console.WriteLine("Export completed. Path to file is: " + pathToFile);
                     break;
                 }
                 catch (FileAlreadyExists e)
@@ -635,7 +632,6 @@ namespace SemestralProject
                     Console.WriteLine("Exporting...");
                     string pathToFile = ExportToCsv<Product>($"{pathToFolder}\\{fileName}.csv", products);
                     Console.WriteLine("Export completed. Path to file is: " + pathToFile);
-                    PressAnyKeyMsg();
                     break;
                 }
                 catch (FileAlreadyExists e)
@@ -677,7 +673,6 @@ namespace SemestralProject
                     Console.WriteLine("Exporting...");
                     string pathToFile = ExportToCsv<Category>($"{pathToFolder}\\{fileName}.csv", categories);
                     Console.WriteLine("Export completed. Path to file is: " + pathToFile);
-                    PressAnyKeyMsg();
                     break;
                 }
                 catch (FileAlreadyExists e)
@@ -916,6 +911,98 @@ namespace SemestralProject
                             }
                         }
                         products = newProducts;
+                        categories = newCategories;
+                        UpdateLastCategoryId();
+                        UpdateLastProductId();
+                    }
+                    return;
+                }
+                catch (FileAlreadyExists e)
+                {
+                    Console.WriteLine($"An error was occured: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Something went wrong: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+            } while (answer != Commands.Back);
+            return;
+        }
+
+        void ImportCategoriesFromCsv()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("Import file");
+                BackToMenuMessage();
+                Console.Write("Write path to folder where is located your file: ");
+                answer = Console.ReadLine();
+                string pathToFolder = "";
+                pathToFolder = answer;
+
+                if (!Directory.Exists(pathToFolder))
+                {
+                    Console.WriteLine("Directory doesn't exists");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+                Console.Write("Write file name: ");
+                answer = Console.ReadLine();
+                string fileName = answer;
+
+                try
+                {
+                    BackToMenuMessage();
+                    Console.WriteLine("Importing...");
+                    List<Category> newCategories = new List<Category>();
+                    using (FileStream fileStream = File.OpenRead($"{pathToFolder}\\{fileName}.csv"))
+                    {
+                        const Int32 BufferSize = 128;
+                        using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
+                        {
+                            String line;
+                            int lineNumber = 0;
+                            while ((line = streamReader.ReadLine()) != null)
+                            {
+                                if (lineNumber == 0)
+                                {
+                                    lineNumber++;
+                                    continue;
+                                }
+
+                                if (line.Split(";").Length != 2)
+                                {
+                                    throw new WrongFormat("Wrong delimiter or columns count");
+                                    break;
+                                    return;
+                                }
+
+                                string[] parts = new string[4];
+                                parts = line.Split(";");
+
+                                int categoryId;
+                                if (!int.TryParse(parts[0], out categoryId))
+                                {
+                                    throw new WrongFormat("Cannot convert column with category id to integer");
+                                    break;
+                                    return;
+                                }
+
+                                Category category = new Category();
+                                category.Id = categoryId;
+                                category.Name = parts[1];
+
+                                Console.WriteLine(line);
+                                lineNumber++;
+                            }
+                        }
                         categories = newCategories;
                         UpdateLastCategoryId();
                         UpdateLastProductId();
@@ -1272,7 +1359,10 @@ namespace SemestralProject
                         break;
                     //Import categories to csv file
                     case Commands.ImportCategoriesFromCsv:
-
+                        Console.Clear();
+                        ImportCategoriesFromCsv();
+                        PressAnyKeyMsg();
+                        Console.ReadKey();
                         break;
                     //Import categories to xml file
                     case Commands.ImportCategoriesFromXml:
