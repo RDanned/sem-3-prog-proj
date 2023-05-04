@@ -9,7 +9,6 @@ namespace SemestralProject
     public class Product: ShopItem
     {
         private string price = "";
-        private List<Category> categories = new List<Category>();
         private Category category = new Category();
 
         public Product()
@@ -29,12 +28,6 @@ namespace SemestralProject
         {
             get { return this.price; }
             set { this.price = value; }
-        }
-
-        public List<Category> Categories
-        {
-            get { return this.categories; }
-            set { this.categories = value; }
         }
 
         public Category Category

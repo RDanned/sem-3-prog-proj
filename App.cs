@@ -399,13 +399,6 @@ namespace SemestralProject
             return;
         }
 
-        /// <summary>
-        /// Provide generic and specific handling of fields
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="p"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
         private static object GetCsvFieldasedOnValue<ShopItemType>(PropertyInfo p, ShopItemType item)
         {
             string value = "";
@@ -417,9 +410,15 @@ namespace SemestralProject
                 if (value.Trim().Length == 0) return ""; // Deal with spaces and blanks
 
                 // Guard strings with "s, they may contain the delimiter!
-                if (p.PropertyType == typeof(string))
+                /*if (p.PropertyType == typeof(string))
                 {
                     value = string.Format("\"{0}\"", value);
+                }*/
+
+                if (p.PropertyType == typeof(Category))
+                {
+                    Category category = p.GetValue(item) as Category;
+                    value = $"{category.Id}|{category.Name}";
                 }
             }
             catch (Exception ex)
@@ -488,7 +487,7 @@ namespace SemestralProject
         void ExportProductsToXml() {
             string answer = "";
             do {
-                Console.WriteLine("Import file");
+                Console.WriteLine("Export file");
                 BackToMenuMessage();
                 Console.Write("Write path to folder where you wanna save your file: ");
                 answer = Console.ReadLine();
@@ -508,9 +507,9 @@ namespace SemestralProject
 
                 try
                 {
-                    Console.WriteLine("Importing...");
+                    Console.WriteLine("Exporting...");
                     string pathToFile = ExportToXml<Product>($"{pathToFolder}\\{fileName}.xml", products);
-                    Console.WriteLine("Imported completed. Path to file is: " + pathToFile);
+                    Console.WriteLine("Export completed. Path to file is: " + pathToFile);
                     PressAnyKeyMsg();
                     break;
                 } catch(FileAlreadyExists e)
@@ -522,14 +521,93 @@ namespace SemestralProject
                 
             } while (answer != Commands.Back);
             return;
-            /*XmlSerializer writer = new XmlSerializer(typeof(List<Product>));
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializedProducts.xml";
-            FileStream file = File.Create(path);
-            writer.Serialize(file, products);
-            file.Close();*/
         }
 
-        void ExportProductsToCsv()
+        void ExportCategoriesToXml()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("Export file");
+                BackToMenuMessage();
+                Console.Write("Write path to folder where you wanna save your file: ");
+                answer = Console.ReadLine();
+                string pathToFolder = "";
+                pathToFolder = answer;
+
+                if (!Directory.Exists(pathToFolder))
+                {
+                    Console.WriteLine("Directory doesn't exists");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+                Console.Write("Write file name: ");
+                answer = Console.ReadLine();
+                string fileName = answer;
+
+                try
+                {
+                    Console.WriteLine("Exporting...");
+                    string pathToFile = ExportToXml<Category>($"{pathToFolder}\\{fileName}.xml", categories);
+                    Console.WriteLine("Export completed. Path to file is: " + pathToFile);
+                    PressAnyKeyMsg();
+                    break;
+                }
+                catch (FileAlreadyExists e)
+                {
+                    Console.WriteLine($"An error was occured: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+            } while (answer != Commands.Back);
+            return;
+        }
+
+        void ExportShopItemToCsvDialog<ShopItemType>(List<ShopItemType> items)
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("Export file");
+                BackToMenuMessage();
+                Console.Write("Write path to folder where you wanna save your file: ");
+                answer = Console.ReadLine();
+                string pathToFolder = "";
+                pathToFolder = answer;
+
+                if (!Directory.Exists(pathToFolder))
+                {
+                    Console.WriteLine("Directory doesn't exists");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+                Console.Write("Write file name: ");
+                answer = Console.ReadLine();
+                string fileName = answer;
+
+                try
+                {
+                    Console.WriteLine("Exporting...");
+                    string pathToFile = ExportToCsv<ShopItemType>($"{pathToFolder}\\{fileName}.csv", items);
+                    Console.WriteLine("Imported completed. Path to file is: " + pathToFile);
+                    PressAnyKeyMsg();
+                    break;
+                }
+                catch (FileAlreadyExists e)
+                {
+                    Console.WriteLine($"An error was occured: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+            } while (answer != Commands.Back);
+            return;
+        }
+
+        /*void ExportProductsToCsv()
         {
             string answer = "";
             do
@@ -556,7 +634,7 @@ namespace SemestralProject
                 {
                     Console.WriteLine("Exporting...");
                     string pathToFile = ExportToCsv<Product>($"{pathToFolder}\\{fileName}.csv", products);
-                    Console.WriteLine("Imported completed. Path to file is: " + pathToFile);
+                    Console.WriteLine("Export completed. Path to file is: " + pathToFile);
                     PressAnyKeyMsg();
                     break;
                 }
@@ -571,26 +649,163 @@ namespace SemestralProject
             return;
         }
 
+        void ExportCategoriesToCsv()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("Export file");
+                BackToMenuMessage();
+                Console.Write("Write path to folder where you wanna save your file: ");
+                answer = Console.ReadLine();
+                string pathToFolder = "";
+                pathToFolder = answer;
+
+                if (!Directory.Exists(pathToFolder))
+                {
+                    Console.WriteLine("Directory doesn't exists");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+                Console.Write("Write file name: ");
+                answer = Console.ReadLine();
+                string fileName = answer;
+
+                try
+                {
+                    Console.WriteLine("Exporting...");
+                    string pathToFile = ExportToCsv<Category>($"{pathToFolder}\\{fileName}.csv", categories);
+                    Console.WriteLine("Export completed. Path to file is: " + pathToFile);
+                    PressAnyKeyMsg();
+                    break;
+                }
+                catch (FileAlreadyExists e)
+                {
+                    Console.WriteLine($"An error was occured: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+            } while (answer != Commands.Back);
+            return;
+        }*/
+
         void ImportProductsFromXml()
         {
-            BackToMenuMessage();
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Product>));
-            Console.WriteLine("test import");
-            using (FileStream stream = File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializedProducts.xml"))
+            string answer = "";
+            do
             {
-                List<Product> dezerializedList = (List<Product>)serializer.Deserialize(stream);
-                products = dezerializedList;
-                foreach(Product product in products)
+                Console.WriteLine("Import file");
+                BackToMenuMessage();
+                Console.Write("Write path to folder where is located your file: ");
+                answer = Console.ReadLine();
+                string pathToFolder = "";
+                pathToFolder = answer;
+
+                if (!Directory.Exists(pathToFolder))
                 {
-                    if (!IsCategoryExists(product.Category))
-                    {
-                        categories.Add(product.Category);
-                        Console.WriteLine("Product category was created");
-                    }   
+                    Console.WriteLine("Directory doesn't exists");
+                    PressAnyKeyMsg();
+                    continue;
                 }
-                UpdateLastCategoryId();
-                UpdateLastProductId();
-            }
+
+                Console.Write("Write file name: ");
+                answer = Console.ReadLine();
+                string fileName = answer;
+
+                try
+                {
+                    BackToMenuMessage();
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<Product>));
+                    Console.WriteLine("Importing...");
+                    using (FileStream stream = File.OpenRead($"{pathToFolder}\\{fileName}.xml"))
+                    {
+                        List<Product> dezerializedList = (List<Product>)serializer.Deserialize(stream);
+                        products = dezerializedList;
+                        foreach (Product product in products)
+                        {
+                            if (!IsCategoryExists(product.Category))
+                            {
+                                categories.Add(product.Category);
+                                Console.WriteLine("Product category was created");
+                            }
+                        }
+                        Console.WriteLine("Imported completed");
+                        UpdateLastCategoryId();
+                        UpdateLastProductId();
+                    }
+                    return;
+                }
+                catch (FileAlreadyExists e)
+                {
+                    Console.WriteLine($"An error was occured: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Something went wrong: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+            } while (answer != Commands.Back);
+            return;
+        }
+
+        void ImportCategoriessFromXml()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("Import file");
+                BackToMenuMessage();
+                Console.Write("Write path to folder where is located your file: ");
+                answer = Console.ReadLine();
+                string pathToFolder = "";
+                pathToFolder = answer;
+
+                if (!Directory.Exists(pathToFolder))
+                {
+                    Console.WriteLine("Directory doesn't exists");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+                Console.Write("Write file name: ");
+                answer = Console.ReadLine();
+                string fileName = answer;
+
+                try
+                {
+                    BackToMenuMessage();
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<Category>));
+                    Console.WriteLine("Importing...");
+                    using (FileStream stream = File.OpenRead($"{pathToFolder}\\{fileName}.xml"))
+                    {
+                        List<Category> dezerializedList = (List<Category>)serializer.Deserialize(stream);
+                        categories = dezerializedList;
+                        Console.WriteLine("Imported completed");
+                        UpdateLastCategoryId();
+                        UpdateLastProductId();
+                    }
+                    return;
+                }
+                catch (FileAlreadyExists e)
+                {
+                    Console.WriteLine($"An error was occured: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine($"Something went wrong: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+            } while (answer != Commands.Back);
             return;
         }
 
@@ -776,7 +991,7 @@ namespace SemestralProject
                 Console.WriteLine($"Import products from csv: [{Commands.ImportProductsFromCsv}]");
                 Console.WriteLine($"Import products from xml: [{Commands.ImportProductsFromXml}]");
                 Console.WriteLine($"Import categories from csv: [{Commands.ImportCategoriesFromCsv}]");
-                Console.WriteLine($"Import categories from xml: [{Commands.ImportProductsFromXml}]");
+                Console.WriteLine($"Import categories from xml: [{Commands.ImportCategoriesFromXml}]");
 
                 Console.Write("Choose action: ");
                 answer = Console.ReadLine().ToLower();
@@ -886,7 +1101,7 @@ namespace SemestralProject
                     //Export products to csv file
                     case Commands.ExportProductsToCsv:
                         Console.Clear();
-                        ExportProductsToCsv();
+                        ExportShopItemToCsvDialog<Product>(products);
                         PressAnyKeyMsg();
                         Console.ReadKey();
                         break;
@@ -899,9 +1114,17 @@ namespace SemestralProject
                         break;
                     //Export categories to csv file
                     case Commands.ExportCategoriesToCsv:
+                        Console.Clear();
+                        ExportShopItemToCsvDialog<Category>(categories);
+                        PressAnyKeyMsg();
+                        Console.ReadKey();
                         break;
                     //Export categories to xml file
                     case Commands.ExportCategoriesToXml:
+                        Console.Clear();
+                        ExportCategoriesToXml();
+                        PressAnyKeyMsg();
+                        Console.ReadKey();
                         break;
                     //Import products to csv file
                     case Commands.ImportProductsFromCsv:
@@ -915,9 +1138,14 @@ namespace SemestralProject
                         break;
                     //Import categories to csv file
                     case Commands.ImportCategoriesFromCsv:
+
                         break;
                     //Import categories to xml file
                     case Commands.ImportCategoriesFromXml:
+                        Console.Clear();
+                        ImportCategoriessFromXml();
+                        PressAnyKeyMsg();
+                        Console.ReadKey();
                         break;
                     default:
                         Console.WriteLine("Action doesn't exist");
