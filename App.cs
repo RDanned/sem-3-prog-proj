@@ -7,21 +7,6 @@ using System.Threading;
 using System.Xml.Serialization;
 using System.Reflection;
 
-/*Add category: [ac]
-Print all categories: [pac]
-Print one category: [poc]
-Add product: [ap]
-Print all products: [pap]
-Print one product: [pop]
-Export products to csv: [epc]
-Export products to xml: [epx]
-Export categories to xml: [ecx]
-Import products from csv: [ipc]
-Import products from xml: [ipx]
-Import categories from csv: [icc]
-Import categories from xml: [icx]
-Delete product: [dp]
-Delete category: [dc]*/
 
 namespace SemestralProject
 {
@@ -64,7 +49,6 @@ namespace SemestralProject
         void PressAnyKeyMsg()
         {
             Console.WriteLine("Press any key to continue...");
-            //Console.ReadLine();
         }
 
         void UpdateLastCategoryId()
@@ -157,7 +141,6 @@ namespace SemestralProject
                         }
                         categories.Remove(category);
                         Console.WriteLine($"Category is deleted: {category.ToString()}");
-                        //product.Categories.Add(new Category());
                         break;
                     }
                     else
@@ -1210,12 +1193,14 @@ namespace SemestralProject
                 Console.WriteLine($"Import categories from csv: [{Commands.ImportCategoriesFromCsv}]");
                 Console.WriteLine($"Import categories from xml: [{Commands.ImportCategoriesFromXml}]");
 
+                Console.WriteLine($"Quit app: [q]");
+
                 Console.Write("Choose action: ");
                 answer = Console.ReadLine().ToLower();
 
                 switch (answer)
                 {
-                    // TEST DATA, todo: delete
+                    // TEST DATA
                     case "init":
                         Category category1 = new Category(1, "Test cat 1");
                         Category category2 = new Category(2, "Test cat 2");
