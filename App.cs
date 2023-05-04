@@ -415,6 +415,7 @@ namespace SemestralProject
             return;
         }
 
+        //Command to help to translate object to csv string
         private static object GetCsvFieldasedOnValue<ShopItemType>(PropertyInfo p, ShopItemType item)
         {
             string value = "";
@@ -444,6 +445,7 @@ namespace SemestralProject
             return value;
         }
 
+        //Starts dialog to export file to csv
         string ExportToCsv<ShopItemType>(string savePath, List<ShopItemType> items)
         {
             if (File.Exists(savePath))
@@ -481,6 +483,7 @@ namespace SemestralProject
             }
         }
 
+        //Additional command that exports categories or products to xml
         string ExportToXml<ShopItemType>(string savePath, List<ShopItemType> items)
         {
             if (File.Exists(savePath))
@@ -500,6 +503,7 @@ namespace SemestralProject
             }
         }
 
+        //Starts dialog export products to xml
         void ExportProductsToXml() {
             string answer = "";
             do {
@@ -538,6 +542,7 @@ namespace SemestralProject
             return;
         }
 
+        //Starts dialog export categories to xml
         void ExportCategoriesToXml()
         {
             string answer = "";
@@ -579,6 +584,7 @@ namespace SemestralProject
             return;
         }
 
+        //Starts dialog export products or categories to csv
         void ExportShopItemToCsvDialog<ShopItemType>(List<ShopItemType> items)
         {
             string answer = "";
@@ -702,6 +708,7 @@ namespace SemestralProject
             return;
         }*/
 
+        //Starts dialog to import products from xml file
         void ImportProductsFromXml()
         {
             string answer = "";
@@ -765,6 +772,7 @@ namespace SemestralProject
             return;
         }
 
+        //Starts dialog to import categories from xml file
         void ImportCategoriessFromXml()
         {
             string answer = "";
@@ -820,6 +828,7 @@ namespace SemestralProject
             return;
         }
 
+        //Starts dialog to import products from csv file
         void ImportProductsFromCsv()
         {
             string answer = "";
@@ -950,6 +959,7 @@ namespace SemestralProject
             return;
         }
 
+        //Starts dialog to import categories from csv file
         void ImportCategoriesFromCsv()
         {
             string answer = "";
@@ -1042,6 +1052,7 @@ namespace SemestralProject
             return;
         }
 
+        //Command to check if category exists
         bool IsCategoryExists(int id)
         {
             bool isExists = false;
@@ -1052,16 +1063,19 @@ namespace SemestralProject
             return isExists;
         }
 
+        //Command to check if category exists
         bool IsCategoryExists(Category category)
         {
             return categories.Contains(category);
         }
 
+        //Command to display information message about returing to main menu
         void BackToMenuMessage()
         {
             Console.WriteLine("return to main: [back]");
         }
 
+        //Starts dialog to edit category
         void EditCategory()
         {
             string answer = "";
@@ -1109,6 +1123,7 @@ namespace SemestralProject
             return;
         }
 
+        //Starts dialog to edit product
         void EditProduct()
         {
             string answer = "";
