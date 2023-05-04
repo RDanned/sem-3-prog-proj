@@ -809,6 +809,136 @@ namespace SemestralProject
             return;
         }
 
+        void ImportProductsFromCsv()
+        {
+            string answer = "";
+            do
+            {
+                Console.WriteLine("Import file");
+                BackToMenuMessage();
+                Console.Write("Write path to folder where is located your file: ");
+                answer = Console.ReadLine();
+                string pathToFolder = "";
+                pathToFolder = answer;
+
+                if (!Directory.Exists(pathToFolder))
+                {
+                    Console.WriteLine("Directory doesn't exists");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+                Console.Write("Write file name: ");
+                answer = Console.ReadLine();
+                string fileName = answer;
+
+                try
+                {
+                    BackToMenuMessage();
+                    Console.WriteLine("Importing...");
+                    List<Product> newProducts = new List<Product>();
+                    List<Category> newCategories = new List<Category>();
+                    using (FileStream fileStream = File.OpenRead($"{pathToFolder}\\{fileName}.csv"))
+                    {
+                        const Int32 BufferSize = 128;
+                        using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
+                        {
+                            String line;
+                            int lineNumber = 0;
+                            while ((line = streamReader.ReadLine()) != null)
+                            {
+                                if (lineNumber == 0)
+                                {
+                                    lineNumber++;
+                                    continue;
+                                }
+
+                                if(line.Split(";").Length != 4)
+                                {
+                                    throw new WrongFormat("Wrong delimiter or columns count");
+                                    break;
+                                    return;
+                                }
+
+                                string[] parts = new string[4];
+                                parts = line.Split(";");
+
+                                int productId;
+                                if (!int.TryParse(parts[1], out productId))
+                                {
+                                    throw new WrongFormat("Cannot convert column with product id to integer");
+                                    break;
+                                    return;
+                                }
+
+                                Product product = new Product();
+                                product.Id = productId;
+                                product.Name = parts[2];
+                                product.Price = parts[3];
+
+                                if (parts[0] != "" && parts[0] != "NULL")
+                                {
+                                    if (!parts[0].Contains("|"))
+                                    {
+                                        throw new WrongFormat("Category columns doesnt contain delimiter");
+                                        break;
+                                        return;
+                                    }
+
+                                    if (parts[0].Split("|").Length != 2)
+                                    {
+                                        throw new WrongFormat("Category column contains too much or less fields");
+                                        break;
+                                        return;
+                                    }
+
+                                    string[] categoryColumn = new string[2];
+                                    categoryColumn = parts[0].Split("|");
+                                    int categoryId;
+
+                                    if (!int.TryParse(categoryColumn[0], out categoryId))
+                                    {
+                                        throw new WrongFormat("Cannot convert category id to integer");
+                                        break;
+                                        return;
+                                    }
+
+                                    Category category = new Category();
+                                    category.Id = categoryId;
+                                    category.Name = categoryColumn[1];
+                                    product.Category = category;
+                                    newCategories.Add(category);
+                                }
+
+                                newProducts.Add(product);
+                                Console.WriteLine(line);
+                                lineNumber++;
+                            }
+                        }
+                        products = newProducts;
+                        categories = newCategories;
+                        UpdateLastCategoryId();
+                        UpdateLastProductId();
+                    }
+                    return;
+                }
+                catch (FileAlreadyExists e)
+                {
+                    Console.WriteLine($"An error was occured: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Something went wrong: {e.Message}");
+                    PressAnyKeyMsg();
+                    continue;
+                }
+
+            } while (answer != Commands.Back);
+            return;
+        }
+
         bool IsCategoryExists(int id)
         {
             bool isExists = false;
@@ -1128,6 +1258,10 @@ namespace SemestralProject
                         break;
                     //Import products to csv file
                     case Commands.ImportProductsFromCsv:
+                        Console.Clear();
+                        ImportProductsFromCsv();
+                        PressAnyKeyMsg();
+                        Console.ReadKey();
                         break;
                     //Import products to xml file
                     case Commands.ImportProductsFromXml:

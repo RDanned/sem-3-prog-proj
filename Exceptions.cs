@@ -11,4 +11,10 @@ namespace SemestralProject
         public FileAlreadyExists() { }
         public FileAlreadyExists(string path): base(String.Format("File already exists: {0}", path)) { }
     }
+
+    public class WrongFormat: Exception
+    {
+        public WrongFormat() { }
+        public WrongFormat(string message) : base(String.Format("Import file has wrong format: {0}", message)) { }
+    }
 }
