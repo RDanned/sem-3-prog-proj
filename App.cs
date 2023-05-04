@@ -10,6 +10,7 @@ using System.Reflection;
 
 namespace SemestralProject
 {
+    //Commands of available actions in app
     static class Commands 
     {
         public const string AddCategory = "ac";
@@ -39,18 +40,22 @@ namespace SemestralProject
 
     internal class App
     {
+        //List with categories
         List<Category> categories = new List<Category>();
+        //List with products
         List<Product> products = new List<Product>();
         int lastCategoryId = 0;
         int lastProductId = 0;
 
         string answer;
 
+        //Prints press any key message
         void PressAnyKeyMsg()
         {
             Console.WriteLine("Press any key to continue...");
         }
 
+        //Updates last category id to set it in later added products
         void UpdateLastCategoryId()
         {
             if (categories.Count > 0)
@@ -69,6 +74,7 @@ namespace SemestralProject
             }
         }
 
+        //Updates last product id to set it in later added products
         void UpdateLastProductId()
         {
             if (products.Count > 0)
@@ -87,6 +93,7 @@ namespace SemestralProject
             }
         }
 
+        //Starts dialog to add category
         void AddCategory()
         {
             Console.WriteLine("You are creating new category");
@@ -99,6 +106,7 @@ namespace SemestralProject
             return;
         }
 
+        //Starts dialog to delete category
         void DeleteCategory()
         {
             string answer = "";
@@ -159,6 +167,8 @@ namespace SemestralProject
             } while (answer != Commands.Back);
         }
 
+
+        //Starts dialog to add product
         void AddProduct()
         {
             string answer = "";
@@ -212,6 +222,7 @@ namespace SemestralProject
             return;
         }
 
+        //Starts dialog to delete product
         void DeleteProduct()
         {
 
@@ -251,6 +262,7 @@ namespace SemestralProject
             return;
         }
 
+        //Prints all products
         void PrintAllProducts()
         {
             if (products.Count > 0)
@@ -267,6 +279,7 @@ namespace SemestralProject
             return;
         }
 
+        //PRints one product by id
         void PrintOneProduct(int? productId)
         {
             Product product = products.Find(product => product.Id == productId);
@@ -280,6 +293,7 @@ namespace SemestralProject
             return;
         }
 
+        //PRints one product by id
         void PrintOneProduct()
         {
             string answer = "";
@@ -323,6 +337,7 @@ namespace SemestralProject
             return;
         }
 
+        //Prints all categories with availability message
         void PrintAvailableCategories()
         {
             Console.WriteLine("-------------------------------");
@@ -331,6 +346,7 @@ namespace SemestralProject
             Console.WriteLine("-------------------------------");
         }
 
+        //Prints all categories
         void PrintAllCategories()
         {
             if (categories.Count > 0)
@@ -347,11 +363,14 @@ namespace SemestralProject
             return;
         }
 
+        //Check, if string id is number
         bool IsValidId(string id)
         {
             return int.TryParse(id, out _);
         }
 
+
+        //Prints one category by id
         void PrintOneCategory()
         {
             string answer = "";
@@ -1174,6 +1193,7 @@ namespace SemestralProject
             return;
         }
 
+        //Run app
         public void run()
         {
 
