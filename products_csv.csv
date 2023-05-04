@@ -1,0 +1,9 @@
+Category;Id;Name;Price
+1|Test cat 1;1;Test prod 1;666
+2|Test cat 2;2;Test prod 2;1345
+3|Test cat 3;3;Test prod 3;346
+4|Test cat 4;4;Test prod 4;754
+NULL;5;Test prod 5;965
+3|Test cat 3;5;Test prod 6;315
+3|Test cat 3;5;Test prod 7;618
+3|Test cat 3;5;Test prod 8;234

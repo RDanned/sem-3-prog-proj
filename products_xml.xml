@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Product>
+		<Id>1</Id>
+		<Name>Test prod 1</Name>
+		<Price>666</Price>
+		<Category>
+			<Id>1</Id>
+			<Name>Test cat 1</Name>
+		</Category>
+	</Product>
+	<Product>
+		<Id>2</Id>
+		<Name>Test prod 2</Name>
+		<Price>1345</Price>
+		<Category>
+			<Id>2</Id>
+			<Name>Test cat 2</Name>
+		</Category>
+	</Product>
+	<Product>
+		<Id>3</Id>
+		<Name>Test prod 3</Name>
+		<Price>346</Price>
+		<Category>
+			<Id>3</Id>
+			<Name>Test cat 3</Name>
+		</Category>
+	</Product>
+	<Product>
+		<Id>4</Id>
+		<Name>Test prod 4</Name>
+		<Price>754</Price>
+		<Category>
+			<Id>4</Id>
+			<Name>Test cat 4</Name>
+		</Category>
+	</Product>
+	<Product>
+		<Id>5</Id>
+		<Name>Test prod 5</Name>
+		<Price>965</Price>
+	</Product>
+	<Product>
+		<Id>5</Id>
+		<Name>Test prod 6</Name>
+		<Price>315</Price>
+		<Category>
+			<Id>3</Id>
+			<Name>Test cat 3</Name>
+		</Category>
+	</Product>
+	<Product>
+		<Id>5</Id>
+		<Name>Test prod 7</Name>
+		<Price>618</Price>
+		<Category>
+			<Id>3</Id>
+			<Name>Test cat 3</Name>
+		</Category>
+	</Product>
+	<Product>
+		<Id>5</Id>
+		<Name>Test prod 8</Name>
+		<Price>234</Price>
+		<Category>
+			<Id>3</Id>
+			<Name>Test cat 3</Name>
+		</Category>
+	</Product>
+</ArrayOfProduct>

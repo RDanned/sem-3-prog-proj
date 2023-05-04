@@ -95,7 +95,7 @@ namespace SemestralProject
             category.Name = Console.ReadLine();
             category.Id = lastCategoryId++;
             categories.Add(category);
-            Console.Write("Category is created: " + category.ToString());
+            Console.WriteLine("Category is created: " + category.ToString());
             return;
         }
 
@@ -111,6 +111,8 @@ namespace SemestralProject
                 Console.Write("Write category Id that will be deleted: ");
                 answer = Console.ReadLine();
                 int categoryId;
+                if (answer == Commands.Back) break;
+
                 bool isNumeric = int.TryParse(answer, out categoryId);
                 if (isNumeric)
                 {
@@ -174,6 +176,7 @@ namespace SemestralProject
 
                 Console.Write($"Choose category (by entering category ID) or create new category ([{Commands.AddCategory}] command): ");
                 answer = Console.ReadLine().ToLower();
+                
                 if (answer == Commands.AddCategory)
                 {
                     this.AddCategory();
@@ -185,13 +188,19 @@ namespace SemestralProject
                     if (isNumeric)
                     {
                         Category category = categories.Find(category => category.Id == categoryId);
+                        Console.WriteLine(category);
                         if (category != null)
                         {
                             product.Category = category;
                         } else
                         {
                             Console.WriteLine("Category doesn't exists");
+                            continue;
                         }
+                    } else
+                    {
+                        Console.WriteLine("Category doesn't exists");
+                        continue;
                     }
                 }
 
@@ -210,9 +219,13 @@ namespace SemestralProject
             do
             {
                 Console.WriteLine("You are deleting a product");
-                Console.Write("Chooise product id to delete");
                 BackToMenuMessage();
+                Console.WriteLine("Available products:");
+                PrintAllProducts();
+                Console.Write("Chooise product id to delete: ");
                 answer = Console.ReadLine().ToLower();
+
+                if (answer == Commands.Back) break;
 
                 if (IsValidId(answer))
                 {
@@ -227,7 +240,7 @@ namespace SemestralProject
                     }
                     else
                     {
-                        Console.WriteLine("Category doesn't exists");
+                        Console.WriteLine("Product doesn't exists");
                         continue;
                     }
                 } else
@@ -273,9 +286,9 @@ namespace SemestralProject
             do
             {
                 Console.WriteLine("You are printing a product");
-
-                Console.Write("Chooise product id to print");
                 BackToMenuMessage();
+                Console.Write("Chooise product id to print: ");
+
                 answer = Console.ReadLine().ToLower();
 
                 if (IsValidId(answer))
@@ -345,9 +358,10 @@ namespace SemestralProject
             do
             {
                 Console.WriteLine("You are printing the category");
-                PrintAllCategories();
-                Console.Write("Chooise category id to display category");
                 BackToMenuMessage();
+                PrintAllCategories();
+                Console.Write("Chooise category id to display category: ");
+
                 answer = Console.ReadLine().ToLower();
 
                 if (IsValidId(answer))
@@ -1035,9 +1049,9 @@ namespace SemestralProject
             do
             {
                 Console.WriteLine("You are editing the category");
-                PrintAllCategories();
-                Console.Write("Chooise category id to modify(edit)");
                 BackToMenuMessage();
+                PrintAllCategories();
+                Console.Write("Chooise category id to modify(edit): ");
                 answer = Console.ReadLine().ToLower();
 
                 if (IsValidId(answer))
@@ -1082,9 +1096,9 @@ namespace SemestralProject
             do
             {
                 Console.WriteLine("You are editing the product");
-                PrintAllProducts();
-                Console.Write("Chooise product id to modify(edit)");
                 BackToMenuMessage();
+                PrintAllProducts();
+                Console.Write("Chooise product id to modify(edit): ");
                 answer = Console.ReadLine().ToLower();
 
                 if (IsValidId(answer))
@@ -1275,6 +1289,7 @@ namespace SemestralProject
                         break;
                     //Delete product
                     case Commands.DeleteProduct:
+                        Console.Clear();
                         DeleteProduct();
                         PressAnyKeyMsg();
                         Console.ReadKey();
